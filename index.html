@@ -14,17 +14,38 @@
 
         <script type="text/babel">
             class Profiles extends React.Component {
+                // Метод handleChange получает новое значение из input и вызывает колбэк из props
+                handleChange = (e) => {
+                    // Здесь `this` ссылается на экземпляр класса Profiles,
+                    // потому что метод объявлен как стрелочная функция.
+                    // В стрелочной функции `this` берет контекст родителя (класса Profiles).
+                    this.props.onPositionChange(e.target.value);
+                };
+
                 render() {
-                    const { name, age, surname, link } = this.props;
+                    // Деструктурируем props, полученные от родительского компонента (App)
+                    const { name, age, surname, link, position } = this.props;
                     return (
                         <div className="profile">
                             <p>
-                                Name: {name}, Surname: {surname}, <br /> Age:
-                                {age}
+                                Name: {name}, Surname: {surname}, <br />
+                                Age: {age}, Position: {position}
                             </p>
                             <a href={link} target="_blank">
-                                <button class="btn-link">Profile Link</button>
+                                <button className="btn-link">
+                                    Profile Link
+                                </button>
                             </a>
+                            <form>
+                                <span>Введите должность</span>
+                                <input
+                                    type="text"
+                                    value={position}
+                                    onChange={this.handleChange}
+                                    // Передаем handleChange в onChange, но `this` остается привязанным к классу Profiles
+                                    // благодаря стрелочной функции
+                                />
+                            </form>
                         </div>
                     );
                 }
@@ -33,10 +54,16 @@
             class App extends React.Component {
                 constructor(props) {
                     super(props);
+                    // Здесь `this` ссылается на экземпляр класса App,
+                    // так как мы находимся внутри конструктора класса.
                     this.state = {
-                        counter: props.counter,
+                        counter: props.counter, // Начальное значение счетчика
+                        position: "", // Начальное значение должности
                     };
                 }
+
+                // Методы ниже используют стрелочные функции,
+                // поэтому `this` всегда будет ссылаться на экземпляр класса App.
 
                 incCounter = () => {
                     this.setState((state) => ({
@@ -62,22 +89,36 @@
                     });
                 };
 
+                // Этот метод получает новое значение `position` от Profiles и обновляет state.
+                handlePositionChange = (newPosition) => {
+                    this.setState({ position: newPosition });
+                    // `this` ссылается на экземпляр класса App, потому что метод объявлен как стрелочная функция.
+                };
+
                 render() {
-                    const { counter } = this.state;
+                    // Деструктурируем состояние
+                    const { counter, position } = this.state;
 
                     return (
                         <div className="app">
+                            {/* Передаем в компонент Profiles текущее значение position и метод для его изменения */}
                             <Profiles
                                 name="John"
                                 age="31"
                                 surname="Smith"
                                 link="https://example.com"
+                                position={position}
+                                onPositionChange={this.handlePositionChange}
+                                // `this.handlePositionChange` передается как props в Profiles,
+                                // но `this` остается привязанным к классу App из-за стрелочной функции.
                             />
                             <Profiles
                                 name="Alex"
                                 age="26"
                                 surname="Shepard"
                                 link="https://example.com"
+                                position={position}
+                                onPositionChange={this.handlePositionChange}
                             />
 
                             <div className="counter">{counter}</div>
@@ -88,12 +129,14 @@
                                 <button onClick={this.resetCounter}>
                                     RESET
                                 </button>
+                                {/* Здесь `this` ссылается на класс App, потому что мы передаем метод как стрелочную функцию */}
                             </div>
                         </div>
                     );
                 }
             }
 
+            // Рендерим приложение и передаем начальное значение счетчика
             ReactDOM.render(
                 <App counter={0} />,
                 document.getElementById("app")

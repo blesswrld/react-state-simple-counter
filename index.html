@@ -4,10 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>React Counter</title>
-        <!-- Подключаем React и ReactDOM через CDN -->
         <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.production.min.js"></script>
-        <!-- Подключаем Babel для компиляции JSX -->
         <script src="https://cdn.jsdelivr.net/npm/@babel/standalone"></script>
         <link rel="stylesheet" href="style.css" />
     </head>
@@ -15,28 +13,41 @@
         <div id="app"></div>
 
         <script type="text/babel">
+            class Profiles extends React.Component {
+                render() {
+                    const { name, age, surname, link } = this.props;
+                    return (
+                        <div className="profile">
+                            <p>
+                                Name: {name}, Surname: {surname}, <br /> Age:
+                                {age}
+                            </p>
+                            <a href={link} target="_blank">
+                                <button class="btn-link">Profile Link</button>
+                            </a>
+                        </div>
+                    );
+                }
+            }
+
             class App extends React.Component {
                 constructor(props) {
                     super(props);
                     this.state = {
-                        counter: this.props.counter,
+                        counter: props.counter,
                     };
                 }
 
                 incCounter = () => {
-                    if (this.state.counter < 50) {
-                        this.setState((state) => ({
-                            counter: state.counter + 1,
-                        }));
-                    }
+                    this.setState((state) => ({
+                        counter: Math.min(state.counter + 1, 50),
+                    }));
                 };
 
                 decCounter = () => {
-                    if (this.state.counter > -50) {
-                        this.setState((state) => ({
-                            counter: state.counter - 1,
-                        }));
-                    }
+                    this.setState((state) => ({
+                        counter: Math.max(state.counter - 1, -50),
+                    }));
                 };
 
                 rndCounter = () => {
@@ -56,6 +67,19 @@
 
                     return (
                         <div className="app">
+                            <Profiles
+                                name="John"
+                                age="31"
+                                surname="Smith"
+                                link="https://example.com"
+                            />
+                            <Profiles
+                                name="Alex"
+                                age="26"
+                                surname="Shepard"
+                                link="https://example.com"
+                            />
+
                             <div className="counter">{counter}</div>
                             <div className="controls">
                                 <button onClick={this.incCounter}>INC</button>

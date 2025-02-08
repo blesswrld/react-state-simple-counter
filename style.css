@@ -50,3 +50,18 @@ body {
     background-color: #6b7a8f;
     color: white;
 }
+
+.profile {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: solid 1px gray;
+}
+
+.btn-link {
+    width: 120px;
+    height: 40px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #6b7a8f;
+    border: none;
+}

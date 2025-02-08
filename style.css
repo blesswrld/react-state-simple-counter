@@ -65,3 +65,15 @@ body {
     background-color: #6b7a8f;
     border: none;
 }
+
+span {
+    display: block;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+input {
+    width: 119px;
+    height: 21px;
+    border: solid 1px gray;
+}
